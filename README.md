@@ -101,7 +101,11 @@ Implement **one** alternative retrieval architecture in
 
 Your project directory **must** follow this structure:
 
+
+Your project directory **must follow this structure:**
+
 Examination/
+│
 ├── config.yaml # global parameters (models, α, β, k)
 │
 ├── data/
@@ -148,4 +152,3 @@ Examination/
 │
 ├── requirements.txt # Python dependencies
 └── .env.example # API keys (Pinecone, HF token, etc.)
-
