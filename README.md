@@ -1,10 +1,11 @@
 ## Task
 
-Design a **multi-agent Retrieval-Augmented Generation (RAG) system** that can:
-1. **Ingest**, index, and retrieve information from *Policy documents* (OECD, EU, UN, NTIA, etc.),
-2. **Analyze and debate** governance trade-offs (transparency, risk, privacy, accountability),
-3. **Verify and summarize** outcomes using autonomous agents,
-4. **Produce an explainable, auditable policy brief** grounded in cited sources.
+You will build and evaluate a **multi-agent RAG pipeline** that:
+- Loads and processes **real-world policy PDFs** (OECD, IMF, UN, etc.)
+- Retrieves relevant context via **Hybrid + Advanced RAG retrieval**
+- Summarizes or answers complex cross-document questions
+- Evaluates factual precision and source alignment
+
 
 The system must combine **classical NLP**, **transformer embeddings**, and **agentic reasoning** within a reproducible GitHub repository.
 
@@ -16,13 +17,20 @@ You will implement the following agents:
 | Agent | Function | Techniques |
 |--------|-----------|-------------|
 | **PDFIngestionAgent** | Parse PDFs, extract text & tables, chunk semantically | PyMuPDF / pdfplumber + spaCy |
-| **RetrieverAgent** | Hybrid RAG: BM25 + dense embeddings | LangChain + Chroma |
-| **SummarizerAgent** | Summarize retrieved context; generate structured policy brief with citations | Flan-T5 / Mistral 7B |
-| **DebateAgents A & B** | Produce opposing stances (e.g. pro-innovation vs risk-control); reach consensus | LangGraph loops |
-| **VerifierAgent** | Cross-check factual grounding (NLI, cosine similarity ≥ 0.8) | `facebook/bart-large-mnli` |
-| **EvaluatorAgent** | Judge clarity, factuality, and balance; record metrics | LLM-based evaluation |
-| **MemoryAgent** | Store run history (α, β fusion weights, retrieval k) and adapt next run | JSON memory store |
-| **VisualizerAgent** | Generate charts for retrieval coverage, confidence, and debate flow | matplotlib / networkx |
+| **PreprocessorAgent** | Tokenize / lemmatize / NER / redact PII | spaCy, regex |
+| **TopicModelAgent** | Topic discovery (LDA / NMF) | scikit-learn / pyLDAvis |
+| **EmbeddingAgent** | Build TF-IDF + BERT / SBERT representations | `sentence-transformers` |
+| **RetrieverAgent** | **Baseline Hybrid RAG** (BM25 + dense Pinecone) | LangChain + rank-bm25 + Pinecone (Free Tier) |
+| **RetrieverExperimentAgent** | **Advanced RAG** (GraphRAG, Cross-Encoder, Self-RAG …) | networkx / CrossEncoder / ColBERT |
+| **PlannerAgent** | Query decomposition & multilingual routing | langdetect, LLM planning |
+| **SummarizerAgent** | Structured summary with citations `[src: file p.X]` | Flan-T5 / Mistral-7B |
+| **DebateAgents A & B** | Argue opposing positions → consensus | LangGraph loops |
+| **VerifierAgent** | NLI & semantic alignment checks | `facebook/bart-large-mnli` |
+| **EvaluatorAgent** | Judge factuality / clarity / bias | LLM-as-judge |
+| **GuardrailsAgent** | PII redaction & prompt injection defence | regex / policy filters |
+| **MemoryAgent** | Persist α β k weights & adapt | JSON store |
+| **VisualizerAgent** | Plot topics / confidence / agent graph | matplotlib / networkx |
+| **Orchestrator** | Connect agents → pipeline | LangGraph state machine |
 
 ---
 
@@ -88,4 +96,37 @@ Implement **one** alternative retrieval architecture in
 | `results/retrieval_comparison.json` | metrics vs baseline |
 | `results/retrieval_plot.png` | visualization |
 | `results/example_hits.txt` | qualitative examples |
+
+## Repository Layout
+Examination-NLP/
+├─ README.md
+├─ config.yaml
+├─ data/
+│ └─ pdfs/ # all reports (OECD, IMF, UNCTAD, WHO)
+├─ queries/
+│ └─ policy_queries.json
+├─ src/
+│ ├─ agents/
+│ │ ├─ pdf_ingestion_agent.py
+│ │ ├─ preprocessor_agent.py
+│ │ ├─ topic_model_agent.py
+│ │ ├─ embedding_agent.py
+│ │ ├─ retriever_agent.py
+│ │ ├─ retriever_experiment_agent.py
+│ │ ├─ planner_agent.py
+│ │ ├─ summarizer_agent.py
+│ │ ├─ debate_agents.py
+│ │ ├─ verifier_agent.py
+│ │ ├─ evaluator_agent.py
+│ │ ├─ guardrails_agent.py
+│ │ ├─ memory_agent.py
+│ │ ├─ visualizer_agent.py
+│ │ └─ orchestrator.py
+│ └─ utils/
+│ ├─ pdf_loader.py
+│ ├─ text_processing.py
+│ └─ metrics.py
+└─ results/
+├─ plots/
+└─ (JSON + TXT outputs)
 
