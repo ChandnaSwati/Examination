@@ -97,36 +97,55 @@ Implement **one** alternative retrieval architecture in
 | `results/retrieval_plot.png` | visualization |
 | `results/example_hits.txt` | qualitative examples |
 
-## Repository Layout
-Examination-NLP/
-├─ README.md
-├─ config.yaml
-├─ data/
-│ └─ pdfs/ # all reports (OECD, IMF, UNCTAD, WHO)
-├─ queries/
-│ └─ policy_queries.json
-├─ src/
-│ ├─ agents/
-│ │ ├─ pdf_ingestion_agent.py
-│ │ ├─ preprocessor_agent.py
-│ │ ├─ topic_model_agent.py
-│ │ ├─ embedding_agent.py
-│ │ ├─ retriever_agent.py
-│ │ ├─ retriever_experiment_agent.py
-│ │ ├─ planner_agent.py
-│ │ ├─ summarizer_agent.py
-│ │ ├─ debate_agents.py
-│ │ ├─ verifier_agent.py
-│ │ ├─ evaluator_agent.py
-│ │ ├─ guardrails_agent.py
-│ │ ├─ memory_agent.py
-│ │ ├─ visualizer_agent.py
-│ │ └─ orchestrator.py
-│ └─ utils/
-│ ├─ pdf_loader.py
-│ ├─ text_processing.py
-│ └─ metrics.py
-└─ results/
-├─ plots/
-└─ (JSON + TXT outputs)
+##  Repository Layout
+
+Your project directory **must** follow this structure:
+
+Examination/
+├── config.yaml # global parameters (models, α, β, k)
+│
+├── data/
+│ └── pdfs/ # provided policy PDFs (OECD, IMF, UNCTAD, WHO)
+│
+├── queries/
+│ └── policy_queries.json # list of predefined questions for the exam
+│
+├── src/
+│ ├── agents/
+│ │ ├── pdf_ingestion_agent.py # Task 1: parse + chunk PDFs
+│ │ ├── preprocessor_agent.py # tokenization, NER, PII redaction
+│ │ ├── topic_model_agent.py # topic modeling (LDA / NMF)
+│ │ ├── embedding_agent.py # embeddings + diagnostics
+│ │ ├── retriever_agent.py # baseline Hybrid RAG (BM25 + Pinecone)
+│ │ ├── retriever_experiment_agent.py # Task 8: advanced retrieval architecture
+│ │ ├── planner_agent.py # query decomposition
+│ │ ├── summarizer_agent.py # summarization with citations
+│ │ ├── debate_agents.py # debate + consensus mechanism
+│ │ ├── verifier_agent.py # factual / semantic verification
+│ │ ├── evaluator_agent.py # evaluation metrics
+│ │ ├── guardrails_agent.py # PII + injection defence
+│ │ ├── memory_agent.py # adaptive memory and parameter tuning
+│ │ ├── visualizer_agent.py # plotting and diagnostics
+│ │ └── orchestrator.py # LangGraph orchestration pipeline
+│ │
+│ └── utils/
+│ ├── pdf_loader.py # helper for reading PDFs
+│ ├── text_processing.py # generic text utilities
+│ └── metrics.py # evaluation metrics (Recall@k, nDCG)
+│
+├── results/
+│ ├── classical_output.json
+│ ├── retrieval_ablation.json
+│ ├── retrieval_comparison.json
+│ ├── metrics.json
+│ ├── memory.json
+│ ├── final_policy_brief.txt
+│ └── plots/
+│ ├── embedding_map.png
+│ ├── retrieval_plot.png
+│ ├── confidence_curve.png
+│ └── debate_graph.png
+│
+├── requirements.txt # Python dependencies
+└── .env.example # API keys (Pinecone, HF token, etc.)
 
