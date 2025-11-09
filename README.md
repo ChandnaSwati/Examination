@@ -57,7 +57,7 @@ You will implement the following agents:
 ### **Task 4 — Planning & Multilingual Query Routing**
 - Detect query language (EN/DE).
 - Decompose complex policy questions into sub-queries via `PlannerAgent`.
-- Save to `results/plans.json`.
+- Save to `results/plan.json`.
 
 ### **Task 5 — Synthesis & Debate**
 - **SummarizerAgent:** produce structured summaries with citations `[src: file.pdf, p.X]`.
@@ -95,5 +95,4 @@ Implement **one** alternative retrieval architecture in
 | `src/agents/retriever_experiment_agent.py` | your advanced retriever |
 | `results/retrieval_comparison.json` | metrics vs baseline |
 | `results/retrieval_plot.png` | visualization |
-| `results/example_hits.txt` | qualitative examples |
 
